@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Todo Planner</title>
+    <style type="text/css">
+    	* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.5rem;
+  background-color: #e6e6e6;
+  transition: background 0.2s linear;
+}
+li {
+  list-style-type: none;
+  text-transform: capitalize;
+  border-bottom: solid 1px #eee;
+  padding-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  align-items: center;
+}
+
+li .list-text {
+  font-size: 18px;
+}
+
+#box {
+  background-color: #fff;
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 40px 50px 20px;
+  box-shadow: 0px 6px 12px 3px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s linear;
+}
+
+button {
+  background-color: #eee;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button > * {
+  pointer-events: none;
+}
+
+.done {
+  background-color: #007500;
+  color: #fff;
+  margin-right: 5px;
+}
+
+.undo {
+  background-color: #03a9f4;
+  color: #fff;
+  margin-right: 5px;
+}
+
+.delete {
+  background-color: #c90000;
+  color: #fff;
+}
+
+.add-btn {
+  padding: 8px 13px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+h3 {
+  color: #8e8e8e;
+}
+
+ul {
+  margin-bottom: 20px;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-todo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-todo label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 8px 10px;
+  border-radius: 3px;
+  margin-left: 25px;
+  font-size: 14px;
+  width: 200px;
+  border: 1px solid #ddd;
+}
+
+.toggle-btn {
+  align-self: flex-end;
+  padding: 8px 6px;
+  font-size: 1rem;
+  transition: all 0.2s linear;
+}
+
+body.dark {
+  background-color: #323233;
+}
+
+body.dark #box {
+  background-color: #4a4a4d;
+  color: #c0c0c1;
+}
+
+body.dark h1,
+body.dark h2 {
+  color: #d7d7d8;
+}
+
+body.dark li {
+  border-bottom: solid 1px #555;
+}
+
+body.dark input {
+  background-color: #323233;
+  border: solid 2px #888;
+  color: #c0c0c1;
+}
+
+body.dark input:focus {
+  outline: none;
+  border: solid 2px #002c84;
+}
+
+body.dark .toggle-btn,
+body.dark .add-btn {
+  background-color: #323233;
+  color: #fff;
+}
+    </style>
+  </head>
+  <body>
+    <div id="box">
+      <button class="toggle-btn">
+        <i class="fa-solid fa-moon"></i> Dark Theme
+      </button>
+      <h1>Todo Planner</h1>
+
+      <div class="add-todo">
+        <form id="todo-form">
+          <label for="">Add Todo:</label>
+          <input type="text" />
+          <button class="add-btn" type="submit">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </form>
+      </div>
+
+      <h2>To-Dos</h2>
+
+      <ul class="todo-list">
+        <li>
+          <div>Go somewhere</div>
+          <button>Done</button>
+        </li>
+        <li>Go somewhere <button>Done</button></li>
+      </ul>
+      <h2>Completed</h2>
+      <ul class="complete-list">
+        <li><s>Go skiing</s></li>
+      </ul>
+    </div>
+    <script src="script.js"></script>
+    <script type="text/javascript">
+    	const todoArr = ['book flights', 'bake cake', 'read book'];
+const completedTodosArr = [];
+
+const todoList = document.querySelector('.todo-list');
+const completeList = document.querySelector('.complete-list');
+const todoForm = document.querySelector('#todo-form');
+const toggleBtn = document.querySelector('.toggle-btn');
+
+todoForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const input = e.target[0];
+
+  if (input.value !== '') {
+    todoArr.unshift(input.value);
+    input.value = '';
+    listTodos();
+  }
+});
+
+// Generate list item
+const genLi = (todo, state) => {
+  return `<li>
+    <div class="list-text">${todo}</div>
+    <div class="btn-group">
+      <button class="${state}"><i class="fa-solid
+        ${state === 'done' ? `fa-check` : `fa-rotate-left`}"></i>
+      </button>
+      <button class="delete"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </li>`;
+};
+
+const checkTodos = (arr, listArr, listHtml, htmlStr) => {
+  arr.length < 1
+    ? (listHtml.innerHTML = htmlStr)
+    : (listHtml.innerHTML = listArr);
+};
+
+const listTodos = () => {
+  const todos = todoArr.map(todo => genLi(todo, 'done')).join('');
+  const compTodos = completedTodosArr.map(todo => genLi(todo, 'undo')).join('');
+
+  checkTodos(
+    completedTodosArr,
+    compTodos,
+    completeList,
+    '<h3>All completed</h3>'
+  );
+  checkTodos(todoArr, todos, todoList, '<h3>No more Todos</h3>');
+};
+
+listTodos();
+
+const deleteItem = (target, arr) => {
+  const arrIndex = arr.indexOf(
+    target.parentNode.previousElementSibling.textContent
+  );
+  arr.splice(arrIndex, 1);
+};
+
+const updateItem = (target, arr, arr2) => {
+  const arrIndex = arr.indexOf(
+    target.parentNode.previousElementSibling.textContent
+  );
+  arr2.unshift(target.parentNode.previousElementSibling.textContent);
+  arr.splice(arrIndex, 1);
+  target.parentNode.remove();
+};
+
+todoList.addEventListener('click', e => {
+  e.preventDefault();
+  const target = e.target;
+  if (target.nodeName === 'BUTTON') {
+    if (target.className === 'done') {
+      updateItem(target, todoArr, completedTodosArr);
+    }
+
+    if (target.className === 'delete') {
+      deleteItem(target, todoArr);
+    }
+  }
+
+  listTodos();
+});
+
+completeList.addEventListener('click', e => {
+  e.preventDefault();
+  const target = e.target;
+  if (target.nodeName === 'BUTTON') {
+    if (target.className === 'undo') {
+      updateItem(target, completedTodosArr, todoArr);
+    }
+    if (target.className === 'delete') {
+      deleteItem(target, completedTodosArr);
+    }
+
+    listTodos();
+  }
+});
+
+toggleBtn.addEventListener('click', e => {
+  e.preventDefault();
+  document.body.classList.toggle('dark');
+  e.target.innerText === ' Dark Theme'
+    ? (e.target.innerHTML = `<i class="fa-solid fa-sun"></i> Light Theme`)
+    : (e.target.innerHTML = `<i class="fa-solid fa-moon"></i> Dark Theme`);
+});
+    </script>
+  </body>
+</html>
